@@ -97,7 +97,7 @@ def _visualize(self):
     x += 1
     for neuron in self.sensory_neurons:
         y += 1
-        neuron.position = (x, y)
+        neuron.position.first, neuron.position.second = x, y
         positions.append(neuron.position)
         symbols.append('t')
         symbol_brushes.append((250, 194, 5))
@@ -107,13 +107,10 @@ def _visualize(self):
     y = (len(self.sensory_neurons) - len(self.interneurons)) / 2
     for neuron in self.interneurons:
         y += 1
-        neuron.position = (
-            random.uniform(
-                x - len(self.sensory_neurons)/1.5,
-                x + len(self.sensory_neurons)/1.5
-            ),
-            y
-        )
+        neuron.position.first = random.uniform(
+            x - len(self.sensory_neurons)/1.5,
+            x + len(self.sensory_neurons)/1.5)
+        neuron.position.second = y
         positions.append(neuron.position)
         symbols.append('h')
         symbol_brushes.append((195, 46, 212))
@@ -123,7 +120,7 @@ def _visualize(self):
     y = (len(self.sensory_neurons) - len(self.motor_neurons)) / 2
     for neuron in self.motor_neurons:
         y += 1
-        neuron.position = (x, y)
+        neuron.position.first, neuron.position.second = x, y
         positions.append(neuron.position)
         symbols.append('s')
         symbol_brushes.append((19, 234, 201))
@@ -245,10 +242,10 @@ for i in repeat(None, TESTING_SAMPLE_SIZE):
         generated_list = generate_list_smaller()
         expected = [0.0, 1.0]
 
-    net.load(generated_list)
+    net.load(generated_list, [])
     time.sleep(TRAINING_DURATION)
 
-    output = net.output
+    output = list(net.output)
     error += abs(expected[0] - output[0])
     error += abs(expected[1] - output[1])
     error_divisor += 2
